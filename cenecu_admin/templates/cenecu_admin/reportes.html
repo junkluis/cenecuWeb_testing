@@ -1,0 +1,178 @@
+{% extends "cenecu_admin/base.html" %}
+{% load static %}
+{% block titulo %} Reportes {% endblock %}
+
+ {% block extraStyle %}
+
+ <style type="text/css">
+     .btn-repo{
+        margin-bottom: 4px;
+     }
+
+     .div-reportes{
+        margin: 20px;
+        margin-left: 20px;
+    }
+
+    option{
+        margin: 2px;
+    }
+
+    .reporte{
+        margin: 20px;
+        padding: 15px;
+        border: solid gray 1px;
+    }
+
+    .rep-div{
+        margin-bottom: 25px; 
+    }
+
+    .rep-grafico{
+        width: 50%:;
+    }
+
+ </style>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+<script src="{% static 'js/reporte.js' %}"></script>
+
+<script type="text/javascript">
+
+    $( document ).ready(function() {
+        {% for curso in lista_curso %}
+        console.log("{{ curso }}");
+        {% endfor %}
+    });
+
+    function mostrarReporte(tipoRepo){
+        var repo1 = $(".reporte-areas-interes");
+        var repo2 = $(".reporte-solicitud-registro");
+        var repo3 = $(".reporte-cursos-compartidos");
+
+        var cursoId = $("#cursos-select").val();
+        if(cursoId != 0){
+            
+            var nombre_curso = $("#cursos-select option:selected").text();
+            $(".nombre-curso").empty();
+            $(".nombre-curso").append(nombre_curso);
+
+            if(tipoRepo == 1){
+                repo1.css("display","block");
+                repo2.css("display","none");
+                repo3.css("display","none");
+                $(".reporte-error").css("display","none");
+
+            } else if(tipoRepo == 2){
+                repo1.css("display","none");
+                repo2.css("display","block");
+                repo3.css("display","none");
+                $(".reporte-error").css("display","none");
+
+            } else if(tipoRepo == 3){
+                repo1.css("display","none");
+                repo2.css("display","none");
+                repo3.css("display","block");
+                $(".reporte-error").css("display","none");
+
+            }
+
+        } else {
+
+            if(tipoRepo == 1){
+                repo1.css("display","block");
+                repo2.css("display","none");
+                repo3.css("display","none");
+
+            } else {
+                $(".reporte-error").css("display","block");
+                repo1.css("display","none");
+                repo2.css("display","none");
+                repo3.css("display","none");
+            
+            }
+
+        }
+
+        
+    }
+
+    function expoRepo(tipoRepo){
+
+        $.ajax({
+            url: {% url 'exportar_reporte' %},
+            data: {
+              'tipoRepo': tipoRepo
+            },
+            dataType: 'json'
+          });
+
+    }
+
+</script>
+
+{% endblock %}
+{% block contenido %}
+
+<div class="col-lg-12">
+		<br>
+		<h2>Reportes de Cenecú App</h2>
+		<br>
+		<div class="col-md-3">
+
+			<div class="card p-30">
+				<div class="media-left meida media-middle">
+                	<span><i class="fa fa-bar-chart f-s-40 color-success"></i></span>
+            	</div>
+            	<br>
+				<a href="/reporteArea"> <h4> Usuarios por área de interés</h4></a>
+				<p> Muestra el porcentaje de usuarios
+				    por cada área de interés. </p> 
+			</div>
+		</div>
+		
+		<div class="col-md-3">
+			<div class="card p-30">
+				<div class="media-left meida media-middle">
+                	<span><i class="fa fa-bar-chart f-s-40 color-success"></i></span>
+            	</div>
+            	<br>
+				<a href="/reporteSolicitud"><h4> Solicitudes de registro por curso</h4></a>
+				<p> Muestra  los cursos que por lo menos
+				tengan una solicitud de registro.</p>
+			</div> 
+		</div>
+
+		<div class="col-md-3">
+			<div class="card p-30">
+				<div class="media-left meida media-middle">
+                	<span><i class="fa fa-bar-chart f-s-40 color-success"></i></span>
+				<h4> Cursos compartidos por red social </h4>
+				<p> Muestra el porcentaje de veces que fue 
+				compartido un curso en redes sociales como 
+				Facebook, Twitter y WhatsApp.</p>
+			</div>
+		</div> 
+
+		</div>
+	
+</div>
+
+
+
+
+
+
+{% endblock %}
+
+{% block extraScript %}
+<script src="{% static 'js/reporte.js' %}"></script>
+<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('table#AreasDeInteres').DataTable();
+    } );
+</script>
+
+{% endblock %}

@@ -1,0 +1,228 @@
+{% extends "cenecu_admin/base.html" %}
+{% load static %}
+{% block titulo %} Reportes {% endblock %}
+{% block extraStyle %}
+
+ <style type="text/css">
+     .btn-repo{
+        margin-bottom: 4px;
+     }
+
+     .div-reportes{
+        margin: 20px;
+        margin-left: 20px;
+    }
+
+    option{
+        margin: 2px;
+    }
+
+    .reporte{
+        margin: 20px;
+        padding: 15px;
+        border: solid gray 1px;
+    }
+
+    .rep-div{
+        margin-bottom: 25px; 
+    }
+
+    .rep-grafico{
+        width: 50%:;
+    }
+
+ </style>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+<script src="{% static 'js/reporte.js' %}"></script>
+
+<script type="text/javascript">
+
+    $( document ).ready(function() {
+        {% for curso in lista_curso %}
+        console.log("{{ curso }}");
+        {% endfor %}
+    });
+
+    function mostrarReporte(tipoRepo){
+        var repo1 = $(".reporte-areas-interes");
+        var repo2 = $(".reporte-solicitud-registro");
+        var repo3 = $(".reporte-cursos-compartidos");
+
+        var cursoId = $("#cursos-select").val();
+        if(cursoId != 0){
+            
+            var nombre_curso = $("#cursos-select option:selected").text();
+            $(".nombre-curso").empty();
+            $(".nombre-curso").append(nombre_curso);
+
+            if(tipoRepo == 1){
+                repo1.css("display","block");
+                repo2.css("display","none");
+                repo3.css("display","none");
+                $(".reporte-error").css("display","none");
+
+            } else if(tipoRepo == 2){
+                repo1.css("display","none");
+                repo2.css("display","block");
+                repo3.css("display","none");
+                $(".reporte-error").css("display","none");
+
+            } else if(tipoRepo == 3){
+                repo1.css("display","none");
+                repo2.css("display","none");
+                repo3.css("display","block");
+                $(".reporte-error").css("display","none");
+
+            }
+
+        } else {
+
+            if(tipoRepo == 1){
+                repo1.css("display","block");
+                repo2.css("display","none");
+                repo3.css("display","none");
+
+            } else {
+                $(".reporte-error").css("display","block");
+                repo1.css("display","none");
+                repo2.css("display","none");
+                repo3.css("display","none");
+            
+            }
+
+        }
+
+        
+    }
+
+    function expoRepo(tipoRepo){
+
+        $.ajax({
+            url: {% url 'exportar_reporte' %},
+            data: {
+              'tipoRepo': tipoRepo
+            },
+            dataType: 'json'
+          });
+
+    }
+
+</script>
+
+{% endblock %}
+{% block contenido %}
+<div class="reporte reporte-areas-interes">
+	<h3 style="text-align: center; margin-bottom: 5px">Cantidad de Usuarios por Áreas de Interés</h3>
+	<div class="rep-div rep-grafico">
+	    <canvas id="grafico-usuarios-interes" width="500px"></canvas>
+	        <script>
+	        var ctx = document.getElementById("grafico-usuarios-interes").getContext('2d');
+	        var myChart = new Chart(ctx, {
+	        type: 'pie',
+	        data: {
+	            labels: [{% for d in dict_curso_numerointeres %} "{{ d }}", {% endfor %}],
+	            datasets: [{
+	                label: '# Usuarios Interesados',
+	                data: [{% for d in dict_curso_numerointeres.values %} {{ d }}, {% endfor %}],
+	                backgroundColor: [
+	                    'rgba(255, 99, 132, 0.2)',
+	                    'rgba(54, 162, 235, 0.2)',
+	                    'rgba(255, 206, 86, 0.2)',
+	                    'rgba(75, 192, 192, 0.2)',
+	                    'rgba(153, 102, 255, 0.2)',
+	                    'rgba(255, 159, 64, 0.2)'
+	                ],
+	                borderColor: [
+	                    'rgba(255,99,132,1)',
+	                    'rgba(54, 162, 235, 1)',
+	                    'rgba(255, 206, 86, 1)',
+	                    'rgba(75, 192, 192, 1)',
+	                    'rgba(153, 102, 255, 1)',
+	                    'rgba(255, 159, 64, 1)'
+	                ],
+	                borderWidth: 1
+	            }]
+	        },
+	         options: {
+	            scales: {
+	                yAxes: [{
+	                    display: false,
+	                    ticks: {
+	                        beginAtZero:true
+	                    }
+	                }]
+	                }
+	            }
+	        }); 
+	        </script>   
+	</div>
+	<div class="rep-div rep-tabla">
+	    <h1>Falta implementar tabla de datos</h1>
+	    <p>Tabla de ejemplo usando dataTables</p>
+	    <div class="tabla-repo">
+	<table id="AreasDeInteres" class="displa table table-striped table-bordered" style="width:100%">
+	    <thead>
+	        <tr>
+	            <th>Name</th>
+	            <th>Position</th>
+	            <th>Office</th>
+	            <th>Age</th>
+	            <th>Salary</th>
+	        </tr>
+	    </thead>
+	    <tbody>
+	        <tr>
+	            <td>Tiger Nixon</td>
+	            <td>System Architect</td>
+	            <td>Edinburgh</td>
+	            <td>61</td>
+	            <td>$320,800</td>
+	        </tr>
+	        <tr>
+	            <td>Cedric Kelly</td>
+	            <td>Senior Javascript Developer</td>
+	            <td>Edinburgh</td>
+	            <td>22</td>
+	            <td>$433,060</td>
+	        </tr>
+	        <tr>
+	            <td>Sonya Frost</td>
+	            <td>Software Engineer</td>
+	            <td>Edinburgh</td>
+	            <td>23</td>
+	            <td>$103,600</td>
+	        </tr>
+	    </tbody>
+	    <tfoot>
+	        <tr>
+	            <th>Name</th>
+	            <th>Position</th>
+	            <th>Office</th>
+	            <th>Age</th>
+	            <th>Salary</th>
+	        </tr>
+	    </tfoot>
+	</table>
+	        
+	    </div>
+	</div>
+	<div class="rep-div rep-expo">
+	    <p>
+	        <button type="button" class="btn btn-success" onclick="expoRepo(1)">Exportar Reporte</button>
+	    </p>
+	</div>
+</div>
+{% endblock %}
+{% block extraScript %}
+<script src="{% static 'js/reporte.js' %}"></script>
+<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('table#AreasDeInteres').DataTable();
+    } );
+</script>
+
+{% endblock %}
+

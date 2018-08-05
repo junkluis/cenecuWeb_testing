@@ -1,0 +1,85 @@
+{% extends "cenecu_admin/base.html" %}
+{% load static %}
+{% block titulo %}Anuncios{% endblock %}
+{% block contenido %}
+<!-- Bread crumb -->
+<!-- End Bread crumb -->
+<!-- Container fluid  -->
+<div class="col-lg-12">
+  <div class="card">
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-info alert-dismissible">
+          <a href="#" class="close" data-dismiss="alert" 
+            aria-label="close">&times;</a>
+          <p class="{{ message.tags }}" align="center">
+            {% if message.tags %} {% endif %}{{ message }}</p>
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    <!-- Muestra una lista de anuncios -->
+    <div class="row">
+      <div class="col-sm-4">
+        <h2>Detalle de Anuncios Publicitarios</h2>
+      </div> 
+
+      <div class="col-sm-8" style="align-content: right; margin-right:0;">
+        <a href="/crearAnuncio"><button style="margin-right:0px;" 
+          type="button" id="nuevo-boton"class="btn btn-info"
+          data-title="Nuevo" data-target="#nuevo">Nuevo</button>
+        </a>  
+      </div>
+    </div>
+    
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Descripción</th>
+            <th>Fecha Creado</th>
+            <th>Fecha Límite</th>
+            <th>Estado</th>
+            <th>Editar</th>
+            <th>Eliminar </th>
+          </tr>
+        </thead>
+        
+        <tbody>
+          <!-- Informacion de un anuncio-->
+          {% for anuncio in anuncios %}
+            <tr>
+              <th scope="row"> {{forloop.counter}}</th>
+              <td>{{anuncio.descripcion}}</td>
+              <td>{{anuncio.fecha_creado}}</td>
+              <td>{{anuncio.fecha_limite}}</td>
+              <td><p style="color:#31c634;"> {{anuncio.estado}}</p></td>
+              
+              <!-- Botón para editar la información de un anuncio -->
+              <td>
+                <a href="/editarAnuncio/{{anuncio.pk}}">
+                  <p  title="Editar"><button type="button" class="btn btn-info" 
+                  data-title="Editar" data-target="#editar" >
+                  <span class="fa fa-edit"></span></button></p>
+                </a>
+              </td>    
+              
+              <!-- Botón para eliminar anuncio -->
+              <td>
+                <a href="/eliminarAnuncio/{{anuncio.pk}}">
+                  <p title="Eliminar"><button  type="button" 
+                  class="btn btn-danger" data-title="Eliminar" 
+                  data-target="#eliminar" ><span class="fa fa-trash"></span>
+                  </button></p>
+                </a> 
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>         
+    </div>
+  </div>
+</div>
+{% endblock %}
+

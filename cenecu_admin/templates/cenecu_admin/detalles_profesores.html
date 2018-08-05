@@ -1,0 +1,83 @@
+{% extends "cenecu_admin/base.html" %}
+{% load static %}
+{% block titulo %}Profesor{% endblock %}
+{% block contenido %}
+<!-- Bread crumb -->
+<!-- End Bread crumb -->
+<!-- Container fluid  -->
+<div class="col-lg-12">
+  <div class="card">
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-info alert-dismissible">
+          <a href="#" class="close" data-dismiss="alert" 
+            aria-label="close">&times;</a>
+          <p class="{{ message.tags }}" align="center">
+            {% if message.tags %} {% endif %}{{ message }}</p>
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    <!-- Muestra una lista de profesores -->
+    <div class="row">
+      <div class="col-sm-4">
+        <h2>Detalle de Profesores</h2>
+      </div> 
+
+      <div class="col-sm-8" style="align-content: right; margin-right:0;">
+        <a href="/crearProfesor"><button style="margin-right:0px;" 
+          type="button" id="nuevo-boton"class="btn btn-info"
+          data-title="Nuevo" data-target="#nuevo">Nuevo</button>
+        </a>
+      </div>
+    </div>
+    
+    <div class="table-responsive">
+      <table class="table table-hover">
+
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Nombres</th>
+          <th scope="col">Título</th>
+          <th scope="col">Estado</th>
+          <th scope="col">Editar</th>
+          <th scope="col">Eliminar </th>
+        </tr>
+      </thead>
+      
+      <tbody>
+        <!-- Informacion del perfil de un profesor-->
+        {% for profesor in profesores %}
+          <tr>
+            <th scope="row"> {{forloop.counter}}</th>
+              <td>{{profesor.nombre}} {{profesor.apellido}}</td>
+              <td>{{profesor.titulo}}</td>
+              <td><p style="color:#31c634;"> {{profesor.estado}}</p></td>
+              
+              <!-- Boton para editar la informacion de un profesor -->
+              <td><a href="/editarProfesor/{{profesor.pk}}">
+                <p  title="Editar"><button type="button" class="btn btn-info" 
+                  data-title="Editar" data-target="#editar" >
+                  <span class="fa fa-edit"></span></button></p>
+                </a>
+              </td>  
+              
+              <!--Botón para eliminar profesor -->
+              <td>
+                <a href="/eliminarProfesor/{{profesor.pk}}">
+                  <p title="Eliminar"><button  type="button" 
+                  class="btn btn-danger" data-title="Eliminar" 
+                  data-target="#eliminar" ><span class="fa fa-trash"></span>
+                  </button></p>
+                </a> 
+              </td>  
+          </tr>
+        {% endfor %}
+      </tbody>
+      </table>         
+    </div>
+  </div>
+</div>
+{% endblock %}
+

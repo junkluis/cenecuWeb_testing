@@ -1,0 +1,17 @@
+[
+	{
+		"model":"Api.Curso",
+		"pk":1,
+		"field":{
+			"nombre":"",
+			"descripcion":"",
+			"duracion_tipo":"",
+			"duracion_cant":"",
+			"costo":,
+			"area_estudio":"",
+			"estado":"",
+
+
+		}
+	}
+]

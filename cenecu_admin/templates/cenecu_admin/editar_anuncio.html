@@ -1,0 +1,128 @@
+{% extends "cenecu_admin/base.html" %}
+{% load static %}
+{% block titulo %} Editar anuncio {% endblock %}
+{% block contenido %}
+<!-- Permite la edicion de la información de un anuncio -->
+<div class="card">
+  <h2>  Editar anuncio </h2>
+  
+  <!-- Campos de la información de un anuncio -->
+  <div class="card-body">
+    <div class="form-validation">
+      <form class="form-valide" action="{% url 'modificar_anuncio' %}" 
+        method="POST"  enctype="multipart/form-data"> {% csrf_token %}
+
+        <div class="form-group row">
+          <label class="col-lg-4 col-form-label" for="descripcion">
+            Descripción<span class="text-danger">*</span></label>
+          <div class="col-lg-6">
+            <input type="textarea"  style=" height: 100px;" rows="10" 
+            cols="50" class="form-control alfanumerico" id="descripcion"
+            name="descripcion" value="{{ descripcion }}" maxlength="256"
+            required onkeydown="validarLetrasNumeros(event)">
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-lg-4 col-form-label" for="img_anuncio">
+            Imagen<span class="text-danger">*</span></label>
+          <div class="col-lg-6">
+            <input type="FILE" class="form-control" id="img_anuncio" 
+              name="img_anuncio" required onchange="validarFormatoImagen()"
+              accept="image/jpg, image/jpeg, image/png">
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-lg-4 col-form-label" for="fecha_limite">
+            Fecha Límite<span class="text-danger">*</span></label>
+          <div class="col-lg-2">
+            <input type="date" class="form-control" id="fecha_limite" name="fecha_limite"
+            value="{{ fecha_limite | date:"Y-m-d"}}" min="" required="">
+          </div>
+        </div>
+        
+        <div class="form-group row">
+          <label class="col-lg-4 col-form-label" for="estado">
+            Estado<span class="text-danger">*</span></label>
+          <div class="col-lg-6">
+            <select class="form-control" id="estado" name="estado">
+              {% if estado == "Activo"%}
+                <option selected value={{ estado }}> {{estado}} </option>
+                <option value="Inactivo">Inactivo</option>
+              {% elif estado == "Inactivo" %}
+                <option selected value={{ estado }}> {{estado}} </option>
+                <option value="Activo">Activo</option>
+              {% endif %}
+            </select>
+          </div>
+          <input type="hidden" name="idanuncio" id="idanuncio" value="{{idanuncio}}" required>
+        </div>
+        
+        <!-- Botón para guardar la informacion editada -->
+        <div class="form-group row">
+          <div class="col-lg-8 ml-auto">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block extraScript %}
+<script type="text/javascript">
+
+  function validarLetrasNumeros(event){
+    var input = document.getElementsByClassName('alfanumerico').value;
+    var key = event.key;            // Obtengo la tecla que presiono
+    var keyCode = event.keyCode;    // Obtengo el codigo de la tecla
+    expresion = /^[A-Z0-9a-záéíóúÁÉÍÓÚñÑ\s\.\',']+$/;
+    
+    if(!expresion.test(input+key)){
+      alert("Este campo permite solo permite letras y números.");
+      event.preventDefault();
+    }
+  }
+
+  function validarFormatoImagen(){
+    var extensionImagenes = /(.jpg|.jpeg|.png)$/i;
+    var imagen = document.getElementById('img_anuncio');
+    var archivo = imagen.value;
+    if(!extensionImagenes.test(archivo)){
+        console.log(archivo);
+        alert("El formato de la imagen no es válido.");
+        document.getElementById('img_anuncio').value = "";
+    }
+  }
+
+
+  /* Para obtener la fecha del sistema, colocarla en el min y que pueda elegir una fecha válida */
+
+  function fechaDelSistema(){
+    var hoy = new Date(),
+        d = hoy.getDate(),
+        m = hoy.getMonth()+1, 
+        y = hoy.getFullYear(),
+        data;
+
+    if(d < 10){
+        d = "0"+d;
+    };
+    if(m < 10){
+        m = "0"+m;
+    };
+
+    fechaActual = y+"-"+m+"-"+d;
+    return fechaActual;
+  }
+
+  var pc = fechaDelSistema();
+
+  document.getElementById("fecha_limite").min = pc;
+
+</script>
+{% endblock %}
+
+

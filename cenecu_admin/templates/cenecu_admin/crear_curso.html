@@ -1,0 +1,171 @@
+{% extends "cenecu_admin/base.html" %}
+{% load static %}
+{% block titulo %} Crear curso {% endblock %}
+{% block contenido %}
+<div class="col-lg-10" >
+    <div class="card" align="center" >
+        <div class="card-body">
+            <h2>Crea un nuevo curso</h2>
+            <br />
+            <div class="form-validation">
+                <form name="nuevoCurso-form"class="form-valide" action="{% url 'nuevo_curso' %}" method="post" enctype="multipart/form-data"> {% csrf_token %}
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="nombreCurso">Nombre<span class="text-danger">*</span></label>
+                        <div class="col-sm-8">
+                            <input  type="text" class="form-control alfanumerico" id="nombreCurso"
+                            name="nombreCurso"  maxlength="100"
+                            placeholder="Ingrese el nombre del curso "
+                            required onkeydown="validarLetrasNumeros(event)"
+                            autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="descripcion">Descripción<span class="text-danger">*</span></label>
+                        <div class="col-sm-8">
+                            <textarea type="textarea" style=" height: 100px;"
+                            rows="10" cols="50" class="form-control alfanumerico"
+                            id="descripcion" name="descripcion" maxlength="256"
+                            placeholder="Ingrese la descripción del curso" 
+                            required onkeydown="validarLetrasNumeros(event)"
+                            autocomplete="off"></textarea> 
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="area">Area<span class="text-danger">*</span></label>
+                        <div class="col-sm-8">
+                            <select class="form-control" id="area" name="area" required>
+                                {%for area in area %}
+                                    <option value="{{area.pk}}">{{area.nombre}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="dias">Dias de clase <span class="text-danger">*</span></label>
+                        <div class="col-sm-8" style="display: inline-flex;">
+                            <div class="div-dias">
+                                <input type="checkbox" name="dia" value="L"> Lunes <br>
+                            </div>
+                            <div class="div-dias">
+                                <input type="checkbox" name="dia" value="M" > Martes<br>
+                            </div>
+                            <div class="div-dias">
+                                <input type="checkbox" name="dia" value="Mi" > Miercoles<br>
+                            </div>
+                            <div>
+                                <input type="checkbox" name="dia" value="J" > Jueves<br>
+                            </div >
+                            <div class="div-dias">
+                                 <input type="checkbox" name="dia" value="V" > Viernes<br>
+                            </div>
+                            <div class="div-dias">
+                                 <input type="checkbox" name="dia" value="S" > Sabados 
+                            </div>
+     
+                        </div>
+</div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="pensum">Pénsum<span class="text-danger">*</span></label>
+                        <div class="col-sm-8">
+                            <input type="FILE" class="form-control" id="pensum" name="pensum" accept=".pdf" onchange="validarFormatoArchivo()" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="duracion">Duración<span class="text-danger">*</span></label>
+                        <div class="col-sm-2">
+                            <input type="number" min="1" class="form-control" id="duracion" name="duracion"  placeholder="Ingrese la duración" required>
+                        </div>
+                        <select class="form-control-lg" id="tipoDuracion" name="tipoDuracion" required>
+                            <option value="S">Semanas</option>
+                            <option value="M">Meses</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="costo" id="costo">Costo<span class="text-danger">*</span></label>
+                        <div class="col-sm-8">
+                            <input type="number" min="1" max="999" step="0.01" class="form-control" id="costo" name="costo" placeholder="Ingrese el costo" 
+                             required onkeydown="validarCosto()"required>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="profesor" id="profesor">Profesor<span class="text-danger">*</span></label>
+                        <div class="col-lg-4">
+                            <select class="form-control" id="profesor" name="profesor" required>
+                                {%for profesor in listaProfesor%}
+                                    <option value="{{profesor.pk}}"> {{profesor.nombre}} {{profesor.apellido }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="imagen">Imagen<span class="text-danger">*</span></label>
+                        <div class="col-sm-8">
+                            <input type="file" class="form-control" id="imagen" name="imagen" required
+                            onchange="validarFormatoImagen()" accept="image/jpg, image/jpeg, image/png">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-lg-12 " align="center">
+                            <button type="submit" class="btn btn-success">Crear</button>
+                            <button type="button" class="btn btn-primary" onclick="resetForm()">Limpiar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>    
+</div>
+
+{% endblock %}
+{% block extraScript %}
+<script src=" {% static 'js/curso.js' %}"></script>
+<script type="text/javascript">
+
+  function validarLetrasNumeros(event){
+    var input = document.getElementsByClassName('alfanumerico').value;
+    var key = event.key;            // Obtengo la tecla que presiono
+    var keyCode = event.keyCode;    // Obtengo el codigo de la tecla
+    expresion = /^[A-Z0-9a-záéíóúÁÉÍÓÚñÑ\s\.\',']+$/;
+    
+    if(!expresion.test(input+key)){
+      alert("Este campo permite solo permite letras y números.");
+      event.preventDefault();
+    }
+  }
+
+    function validarFormatoArchivo() {
+        var extensionArchivo = /(.pdf)$/i;
+        var pensum = document.getElementById('pensum');
+        var filePensum = pensum.value;
+        if(!extensionArchivo.test(filePensum)){
+            console.log(filePensum);
+            alert("El formato del pensum debe ser PDF.");
+            document.getElementById('pensum').value = "";            
+        }
+    }
+
+    function validarFormatoImagen(){
+        var extensionImagenes = /(.jpg|.jpeg|.png)$/i;
+        var imagen = document.getElementById('imagen');
+        var fileImagen = imagen.value;
+        if(!extensionImagenes.test(fileImagen)){
+            console.log(fileImagen);
+            alert("El formato de la imagen no es válido.");
+            document.getElementById('imagen').value = "";            
+        }
+
+    }
+    function resetForm(){
+        document.getElementById("form-nuevo-curso").reset();
+    }
+
+</script>
+{% endblock %}

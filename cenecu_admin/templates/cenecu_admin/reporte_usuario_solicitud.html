@@ -1,0 +1,133 @@
+{% extends "cenecu_admin/base.html" %}
+{% load static %}
+{% block titulo %} Reportes {% endblock %}
+{% block extraStyle %}
+
+
+ <style type="text/css">
+     .btn-repo{
+        margin-bottom: 4px;
+     }
+
+     .div-reportes{
+        margin: 20px;
+        margin-left: 20px;
+    }
+
+    option{
+        margin: 2px;
+    }
+
+    .reporte{
+        margin: 20px;
+        padding: 15px;
+        border: solid gray 1px;
+    }
+
+    .rep-div{
+        margin-bottom: 25px; 
+    }
+
+    .rep-grafico{
+        width: 50%:;
+    }
+
+ </style>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+<script src="{% static 'js/reporte.js' %}"></script>
+
+<script type="text/javascript">
+
+
+    function expoRepo(tipoRepo){
+
+        $.ajax({
+            url: {% url 'exportar_reporte' %},
+            data: {
+              'tipoRepo': tipoRepo
+            },
+            dataType: 'json'
+          });
+
+    }
+
+</script>
+
+{% endblock %}
+{% block contenido %}
+<div class="reporte reporte-solicitud-registro">
+        <h3 style="text-align: center; margin-bottom: 5px">Cantidad de Solicitudes de Registros por Curso</h3>
+         {% if total_cursos == 0 %}
+            <h4 style="color: red; text-align: center"> No existen solicitudes de registro en los ultimos 30 dias</h4>
+         {% else %}
+        <div class="rep-div rep-grafico">
+             <canvas id="grafico-solicitudes-registro" width="500px"></canvas>
+                <script>
+                var ctx = document.getElementById("grafico-solicitudes-registro").getContext('2d');
+                var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [{% for clave in dict_curso_numregistro %} "{{ clave }}", {% endfor %}],
+                    datasets: [{
+                        label: '# Usuarios Interesados',
+                        data: [{% for valor in dict_curso_numregistro.values %} {{ valor}}, {% endfor %}],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)',
+                            'rgba(124, 252, 0,0.2)',
+                            'rgba(235, 215, 0,0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255,99,132,1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(124, 252, 0,1)',
+                            'rgba(235, 215, 0,1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                 options: {
+                    scales: {
+                        yAxes: [{
+                            display: false,
+                            ticks: {
+                                beginAtZero:true
+                            }
+                        }]
+                        }
+                    }
+                }); 
+                </script>  
+               {% endif %} 
+        </div>
+        <div class="rep-div rep-tabla">
+            <h1>Falta implementar tabla de datos</h1>
+        </div>
+        <div class="rep-div rep-expo">
+            <p>
+                <button type="button" class="btn btn-success">Exportar Reporte</button>
+            </p>
+        </div>
+ </div>
+{% endblock %}
+{% block extraScript %}
+<script src="{% static 'js/reporte.js' %}"></script>
+<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('table#AreasDeInteres').DataTable();
+    } );
+</script>
+
+{% endblock %}
+

@@ -1,0 +1,124 @@
+{% extends "cenecu_admin/base.html" %}
+{% load static %}
+{% block titulo %} Crear anuncio {% endblock %}
+{% block contenido %}
+<!-- Permite la creación de información de un anuncio -->
+<div class="card">
+  <h2>Crea un nuevo anuncio</h2>
+  
+  <!-- Campos de un anuncio -->
+  <div class="card-body">
+    <div class="form-validation">
+      <form class="form-valide" action="{% url 'nuevo_anuncio' %}"
+          method="post"  enctype="multipart/form-data"> {% csrf_token %}
+        
+        <div class="form-group row">
+          <label class="col-lg-4 col-form-label" for="descripcion">
+            Descripción<span class="text-danger">*</span></label>
+          <div class="col-lg-6">
+            <input type="textarea" style=" height: 100px;" rows="10" 
+            cols="50" class="form-control alfanumerico" id="descripcion"
+            name="descripcion" maxlength="256" 
+            placeholder="Ingrese la descripción del anuncio" 
+            required onkeydown="validarLetrasNumeros(event)">
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-lg-4 col-form-label" for="img_anuncio">
+            Imagen<span class="text-danger">*</span></label>
+          <div class="col-lg-6">
+            <input type="FILE" class="form-control" id="img_anuncio" 
+              name="img_anuncio" required onchange="validarFormatoImagen()"
+              accept="image/jpg, image/jpeg, image/png">
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-lg-4 col-form-label" for="fecha_limite">
+            Fecha Límite</label>
+            <div class="col-lg-2">
+              <input type="date" class="form-control" id="fecha_limite" name="fecha_limite" min="">
+            </div>  
+        </div>
+
+        <div class="form-group row" hidden>
+          <label class="col-lg-4 col-form-label" for="estado">
+            Estado<span class="text-danger">*</span></label>
+          <div class="col-lg-6">
+            <select class="form-control" id="estado" name="estado">
+              <option value="Activo">Activo</option>
+              <option value="Inactivo">Inactivo</option>
+            </select>
+          </div>
+        </div>
+        <br />
+
+        <!-- Botón para agregar una nuevo anuncio-->
+        <div class="form-group row">
+          <div class="col-lg-8 ml-auto">
+            <button type="submit" class="btn btn-primary">Crear</button>
+          </div>
+        </div>
+        
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block extraScript %}
+<script type="text/javascript">
+
+  function validarLetrasNumeros(event){
+    var input = document.getElementsByClassName('alfanumerico').value;
+    var key = event.key;            // Obtengo la tecla que presiono
+    var keyCode = event.keyCode;    // Obtengo el codigo de la tecla
+    expresion = /^[A-Z0-9a-záéíóúÁÉÍÓÚñÑ]+$/;
+    
+    if(!expresion.test(input+key)){
+      alert("Este campo permite solo permite letras y números.");
+      event.preventDefault();
+    }
+  }
+
+
+  function validarFormatoImagen(){
+    var extensionImagenes = /(.jpg|.jpeg|.png)$/i;
+    var imagen = document.getElementById('img_anuncio');
+    var archivo = imagen.value;
+    if(!extensionImagenes.test(archivo)){
+        console.log(archivo);
+        alert("El formato de la imagen no es válido.");
+        document.getElementById('img_anuncio').value = "";
+    }
+  }
+
+  /* Para obtener la fecha del sistema y colocarla en el input */
+
+  function fechaDelSistema(_id){
+    var _dat = document.querySelector(_id);
+    var hoy = new Date(),
+        d = hoy.getDate(),
+        m = hoy.getMonth()+1, 
+        y = hoy.getFullYear(),
+        data;
+
+    if(d < 10){
+        d = "0"+d;
+    };
+    if(m < 10){
+        m = "0"+m;
+    };
+
+    fechaActual = y+"-"+m+"-"+d;
+    _dat.value = fechaActual;
+  }
+
+  fechaDelSistema("#fecha_limite");
+
+  var pc = document.getElementById('fecha_limite').value;
+
+  document.getElementById("fecha_limite").min = pc;
+
+</script>
+{% endblock %}
