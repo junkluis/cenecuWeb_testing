@@ -1,67 +1,57 @@
 {% extends "cenecu_admin/base.html" %}
 {% load static %}
 {% block titulo %} Editar curso {% endblock %}
-{% block contenido %}
-<div class="col-lg-10" >
-    <div class="card" >
-        <div class="card-body">
-            <h2>Editar Curso</h2>
-            <br>
-		<div class="form-validation">
-            <form class="form-valide" action="{% url 'modificar_curso' %}" method="POST"
-            enctype="multipart/form-data"> {% csrf_token %}
-                <div class="form-group row">
-                    <label class="col-lg-4 col-form-label" for="nombreCurso">Nombre<span class="text-danger">*</span></label>
-                    <div class="col-lg-6">
-                        <input type="text" class="form-control alfanumerico"
-                        id="nombreCurso" name="nombreCurso" maxlength="100"
-                        value="{{nombre}}"
-                        required onkeydown="validarLetrasNumeros(event)"
-                        autocomplete="off">
-                    </div>
-                </div>
+{% block extraStyle %}
 
-                <div class="form-group row">
-                    <label class="col-lg-4 col-form-label" for="descripcion">Descripción<span class="text-danger">*</span></label>
-                    <div class="col-lg-6">
-                        <input type="textarea"  style=" height: 100px;" rows="10" 
+<style type="text/css">
+
+    .div-dias {
+        margin-left: 10px;
+    }
+
+    .div-dias input {
+        margin-left: 5px;
+    }
+
+ </style>
+
+
+{% endblock %}
+{% block contenido %}
+<div class="col-lg-12" >
+    <div class="card" align="center" >
+        <div class="card-body">
+            <h2>Editar curso</h2>
+            <br>
+            <div class="form-validation">
+                <form id="nuevoCurso-form"class="form-valide" action="{% url  'modificar_curso' %}" method="post" enctype="multipart/form-data"> {% csrf_token %}
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="nombreCurso">Nombre<span class="text-danger">*</span></label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control alfanumerico"
+                            id="nombreCurso" name="nombreCurso" maxlength="100"
+                            value="{{nombre}}"
+                            required onkeydown="validarLetrasNumerosNombre(event)"
+                            autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="descripcion">Descripción<span class="text-danger">*</span></label>
+                        <div class="col-sm-8">
+                            <textarea type="textarea"  style=" height: 100px;" rows="10" 
                         cols="50" class="form-control alfanumerico"
                         id="descripcion" name="descripcion"
-                        value="{{ descripcion }}" maxlength="256"
-                        required onkeydown="validarLetrasNumeros(event)" 
-                        autocomplete="off">
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                        <label class="col-sm-4 col-form-label" for="dias">Dias de clase <span class="text-danger">*</span></label>
-                        <div class="col-sm-6" style="display: inline-flex;">
-                            <div class="div-dias">
-                                <input type="checkbox" name="dia" value="L"> Lunes <br>
-                            </div>
-                            <div class="div-dias">
-                                <input type="checkbox" name="dia" value="M" > Martes<br>
-                            </div>
-                            <div class="div-dias">
-                                <input type="checkbox" name="dia" value="Mi" > Miercoles<br>
-                            </div>
-                            <div>
-                                <input type="checkbox" name="dia" value="J" > Jueves<br>
-                            </div >
-                            <div class="div-dias">
-                                 <input type="checkbox" name="dia" value="V" > Viernes<br>
-                            </div>
-                            <div class="div-dias">
-                                 <input type="checkbox" name="dia" value="S" > Sabados 
-                            </div>
-     
+                         maxlength="256"
+                        required onkeydown="validarLetrasNumerosDescripcion(event)" 
+                        autocomplete="off">{{descripcion}}</textarea>
                         </div>
-                </div>
+                    </div>
 
-                 <div class="form-group row">
-                    <label class="col-lg-4 col-form-label" for="area">Area<span class="text-danger">*</span></label>
-                    <div class="col-lg-6">
-                        <select class="form-control" id="area" name="area" >
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="area">Area<span class="text-danger">*</span></label>
+                        <div class="col-sm-8">
+                            <select class="form-control" id="area" name="area" >
                             {%for area in listaArea %}
                                     {% if area.nombre == area_estudio.nombre %}
                                         <option selected value="{{area_estudio.pk}}">   {{area_estudio.nombre}}</option>
@@ -70,123 +60,153 @@
                                     {% endif %}
                             {% endfor %}
                         </select>
+                        </div>
                     </div>
-                </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="dias">Dias de clase <span class="text-danger">*</span></label>
+                        <div class="col-sm-8" style="display: inline-flex;">
+                            <div class="div-dias">
+                                <input type="checkbox" name="checks[]" class="chk" id="dia-l" value="L"  > Lunes<br>
+                            </div>
+                            <div class="div-dias">
+                                <input type="checkbox" name="checks[]" class="chk" id="dia-m" value="M"  > Martes<br>
+                            </div>
+                            <div class="div-dias">
+                                <input type="checkbox" name="checks[]" class="chk" id="dia-mi" value="Mi"  > Miercoles<br>
+                            </div>
+                            <div class="div-dias">
+                                <input type="checkbox" name="checks[]" class="chk" id="dia-j"   value="J"  > Jueves<br>
+                            </div>
+                            <div class="div-dias">
+                                <input type="checkbox" name="checks[]" class="chk"  id="dia-v" value="V"  > Viernes<br>
+                            </div>
+                            <div class="div-dias">
+                                <input type="checkbox" name="checks[]" class="chk"  id="dia-s"  value="S"  > Sabado<br>
+                            </div>
+     
+                        </div>
+                    </div>
 
-                <div class="form-group row">
-                    <label class="col-lg-4 col-form-label" for="pensum">Pénsum<span class="text-danger">*</span></label>
-                    <div class="col-lg-6">
-                        <!--<input type="FILE" class="form-control" id="pensum" name="pensum" value="{{urlPensum}}" required>-->
-                        <input type="FILE" class="form-control" id="pensum" name="pensum" value="{{urlPensum}}" accept=".pdf" onchange="validarFormatoArchivo()" required>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="dias">Horarios de clases <span class="text-danger">*</span></label>
+                        <div class="col-sm-10" style="display: inline-flex;">
+                                <label class="col-sm-2 col-form-label" for="dias">Hora Inicio <span class="text-danger">*</span></label>
+                                <div class=col-sm-2 style="display: inline-flex;">
+                                    <input type="time" min="07:00" max="22:00" value="{{hora_inicio}}:{{minutos_inicio}}" class="form-control" id="hora-inicio" name="hora-inicio">    
+                                </div>
+                            
+                            
+                                <label class="col-sm-2 col-form-label" for="dias">Hora Fin <span class="text-danger">*</span></label>
+                                <div class=col-sm-2 style="display: inline-flex;">
+                                    <input type="time" min="07:00" max="22:00" value="{{hora_fin}}:{{minutos_fin}}" class="form-control" id="hora-fin" name="hora-fin" 
+                                 required>
+                                </div>
+                        </div>
+                    <br ><br ><br ><br >
+                    <div class="form-group row">
+                        <label class="col-sm-5 col-form-label" for="pensum">
+                        Pénsum actual</label>
+                        <div class="col-sm-6">
+                            <p>{{ urlPensum }}</p>
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group row">
-                    <label class="col-sm-4 col-form-label" for="duracion">Duración<span class="text-danger">*</span></label>
-                    <div class="col-sm-2">
-                    <input type="number" min="1" class="form-control" id="duracion" name="duracion" value="{{duracion}}" placeholder="Ingrese la duración" required>
                     </div>
-                    <select class="form-control-lg" id="duracion_tipo" name="duracion_tipo" value="{{duracion_tipo}}">
-                        {% if duracion_tipo == "H" %}
-                            <option selected value="{{duracion_tipo}}">Horas</option>
-                            <option value="S">Semanas</option>
-                        {% elif duracion_tipo == "S" %}
-                            <option selected value="{{duracion_tipo}}">Semanas</option>
-                            <option value="M">Meses</option>
-                        {% endif %}
-                    </select>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="pensum">Pénsum<span class="text-danger"></span></label>
+                        <div class="col-sm-8">
+                            <input type="FILE" class="form-control" id="pensum" name="pensum" value="{{urlPensum}}" accept=".pdf" onchange="validarFormatoArchivo()">
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group row">
-                    <label class="col-lg-4 col-form-label" for="costo">Costo<span class="text-danger">*</span></label>
-                    <div class="col-lg-6">
-                        <input type="text" class="form-control" id="costo" name="costo" value="{{costo}}"  required>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="duracion">Duración<span class="text-danger">*</span></label>
+                        <div class="col-sm-2">
+                            <input type="number" min="1" class="form-control" id="duracion" name="duracion" value="{{duracion}}" placeholder="Ingrese la duración" required>
+                        </div>
+                        <select class="form-control-lg" id="duracion_tipo" name="duracion_tipo" value="{{duracion_tipo}}">
+                            {% if duracion_tipo == "H" %}
+                                <option selected value="{{duracion_tipo}}">Horas</option>
+                                <option value="S">Semanas</option>
+                            {% elif duracion_tipo == "S" %}
+                                <option selected value="{{duracion_tipo}}">Semanas</option>
+                                <option value="M">Meses</option>
+                            {% endif %}
+                        </select>
                     </div>
-                </div>
 
-                <div class="form-group row">
-                    <label class="col-lg-4 col-form-label" for="profesor">Profesor<span class="text-danger">*</span></label>
-                    <div class="col-lg-6">
-                        <select class="form-control" id="profesor" name="profesor">
-                        	{% for profesor in lista_profesores %} 
-                                {% if profesor.nombre == nombreProfesor %}                         
-                            	   <option selected value="{{profesor.pk}}"> {{profesor.nombre}} {{profesor.apellido}} </option>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="costo" id="costo">Costo<span class="text-danger">*</span></label>
+                        <div class="col-sm-8">
+                            <input type="number" min="1" max="999" step="0.01" class="form-control" id="costo" name="costo"  value="{{costo}}"  placeholder="Ingrese el costo" 
+                             required onkeydown="validarCosto()"required>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="profesor" id="profesor">Profesor<span class="text-danger">*</span></label>
+                        <div class="col-lg-4">
+                            <select class="form-control" id="profesor" name="profesor">
+                            {% for profesor in lista_profesores %} 
+                                {% if profesor.nombre == nombreProfesor %}   
+
+                                   <option selected value="{{profesor.pk}}"> {{profesor.nombre}} {{profesor.apellido}} </option>
                                 {% else %}
                                     <option value="{{profesor.pk}}"> {{profesor.nombre}} {{profesor.apellido}} </option>                               
                                 {% endif %}
                             {% endfor %}
                         </select>
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group row">
-                    <label class="col-lg-4 col-form-label" for="imgCurso">Imagen<span class="text-danger">*</span></label>
-                    <div class="col-lg-6">
-                        <input type="file" class="form-control" id="imagen" name="imagen" value="{{imgCurso}}" required onchange="validarFormatoImagen()" accept="image/jpg, image/jpeg, image/png">
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="imgCurso">
+                        Imagen actual</label>
+                        <div class="col-sm-4">
+                            <p>{{ imgCurso }}</p>
+                        </div>    
+                    </div> 
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="imagen">Imagen<span class="text-danger"></span></label>
+                        <div class="col-sm-8">
+                           <input type="file" class="form-control" id="imagen" name="imagen" value="{{imgCurso}}" onchange="validarFormatoImagen()" accept="image/jpg, image/jpeg, image/png">
+                        </div>
+                        <input type="hidden" name="idcurso" id="idcurso" 
+                                          value="{{ idcurso }}">
                     </div>
-                </div>
-
-
-                <div class="form-group row">
-                        <div class="col-lg-12 " align="center">
-                            <button type="submit" class="btn btn-success">Crear</button>
+                    <div class="form-group row">
+                        <div class="col-lg-10 ">
+                            <button type="submit" class="btn btn-success">Guardar</button>
                             <button type="button" class="btn btn-primary" onclick="resetForm()">Limpiar</button>
                         </div>
-                </div>
-            </form>
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
+    </div>    
 </div>
 {% endblock %}
 {% block extraScript %}
-<script src=" {% static 'js/curso.js' %}"></script>
-<script type="text/javascript">
+<script  type="text/javascript" >
+    {% for dias in horario_curso %}
+        {% if dias.dia == 'L'%}
+          document.getElementById("dia-l").checked = true;
+        {% elif dias.dia == 'M'%}
+          document.getElementById("dia-m").checked = true;
+        {% elif dias.dia == 'Mi'%}
+          document.getElementById("dia-mi").checked = true;
+        {% elif dias.dia == 'J'%}
+          document.getElementById("dia-j").checked = true;
+        {% elif dias.dia == 'V'%}
+          document.getElementById("dia-v").checked = true;
+        {% else %}
+          document.getElementById("dia-s").checked = true;
+        
+        {% endif %}
+    {% endfor %}
 
-    function validarLetrasNumeros(event){
-      var input = document.getElementsByClassName('alfanumerico').value;
-      var key = event.key;            // Obtengo la tecla que presiono
-      var keyCode = event.keyCode;    // Obtengo el codigo de la tecla
-      expresion = /^[A-Z0-9a-záéíóúÁÉÍÓÚñÑ\s\.\',']+$/;
-    
-      if(!expresion.test(input+key)){
-        alert("Este campo permite solo permite letras y números.");
-        event.preventDefault();
-      }
-    }
-
-    function validarFormatoArchivo() {
-        var extensionArchivo = /(.pdf)$/i;
-        var pensum = document.getElementById('pensum');
-        var filePensum = pensum.value;
-        if(!extensionArchivo.test(filePensum)){
-            console.log(filePensum);
-            alert("El formato del pensum debe ser PDF.");
-            document.getElementById('pensum').value = "";            
-        }
-    }
-
-    function validarFormatoImagen(){
-        var extensionImagenes = /(.jpg|.jpeg|.png)$/i;
-        var imagen = document.getElementById('imagen');
-        var fileImagen = imagen.value;
-        if(!extensionImagenes.test(fileImagen)){
-            console.log(fileImagen);
-            alert("El formato de la imagen no es válido.");
-            document.getElementById('imagen').value = "";            
-        }
-
-    }
-     function resetForm(){
-        document.getElementById("nombreCurso").value='';
-        document.getElementById("descripcion").value='';
-        document.getElementById("area").value='';
-        document.getElementById("pensum").value='';   
-        document.getElementById("duracion").value='';
-        document.getElementById("costo").value='';
-        document.getElementById("profesor").value='';
-        document.getElementById("imagen").value='';         
-}
 
 </script>
+<script src="/static/js/scripts/cursos.js"></script>
 {% endblock %}

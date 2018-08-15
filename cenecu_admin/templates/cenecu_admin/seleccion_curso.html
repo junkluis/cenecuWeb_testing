@@ -1,0 +1,47 @@
+{% extends "cenecu_admin/base.html" %}
+{% load static %}
+{% block titulo %} Reportes {% endblock %}
+{% block contenido %}
+<div class="col-lg-10" >
+	<div class="reporte reporte-areas-interes">
+		<div class="card">
+			<div class = "card-body">
+			<br>
+			<h3 style="text-align: center; margin-bottom: 5px">Reporte Curso numero de veces compartido</h3>
+			<br>
+			<h4> Selecciona un curso para generar reporte</h4>
+			<br>
+			<select class="form-control" id="curso" name="curso" >
+			{% for curso in listaCursos %} 
+					 {% if curso.estado == "Activo"  %}
+					 	<option value="{{curso.pk}}"> {{curso.nombre}}</option>
+					  {% endif %} 
+				
+			{% endfor %}
+
+			</select>
+	        <div class="col-lg-12 " align="center" style="margin-top: 20px;">
+	        	<a href="/reporteCurso/" id="link">
+	            <button  class="btn btn-success">Ver Reporte </button>
+	            </a>
+	        </div>
+	    </div>
+	</div>
+</div>
+
+{% endblock %}
+{% block extraScript %}
+<script src=" {% static 'js/curso.js' %}"></script>
+<script type="text/javascript">
+
+  jQuery(document).ready(function($) {
+
+            $("#curso").on('change',function () {
+                        var ref =$(this).find('option:selected').attr('value');
+                        $('#link').attr('href', ref);
+
+            });
+
+        });
+</script>
+{% endblock %}

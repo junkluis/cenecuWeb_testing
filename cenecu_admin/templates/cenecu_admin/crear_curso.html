@@ -1,21 +1,38 @@
 {% extends "cenecu_admin/base.html" %}
 {% load static %}
 {% block titulo %} Crear curso {% endblock %}
+{% block extraStyle %}
+
+ <style type="text/css">
+
+    .div-dias {
+        margin-left: 10px;
+    }
+
+    .div-dias input {
+        margin-left: 5px;
+    }
+
+ </style>
+
+
+{% endblock %}
+
 {% block contenido %}
-<div class="col-lg-10" >
-    <div class="card" align="center" >
-        <div class="card-body">
-            <h2>Crea un nuevo curso</h2>
+<div class="col-lg-12" >
+    <div class="card">
+        <div class="card-body formulario">
+            <h2>Crear un nuevo curso</h2>
             <br />
             <div class="form-validation">
-                <form name="nuevoCurso-form"class="form-valide" action="{% url 'nuevo_curso' %}" method="post" enctype="multipart/form-data"> {% csrf_token %}
+                <form id="nuevoCurso-form"class="form-valide" action="{% url 'nuevo_curso' %}" method="post" enctype="multipart/form-data"> {% csrf_token %}
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label" for="nombreCurso">Nombre<span class="text-danger">*</span></label>
                         <div class="col-sm-8">
                             <input  type="text" class="form-control alfanumerico" id="nombreCurso"
-                            name="nombreCurso"  maxlength="100"
+                            name="nombreCurso" maxlength="100"
                             placeholder="Ingrese el nombre del curso "
-                            required onkeydown="validarLetrasNumeros(event)"
+                            required onkeydown="validarLetrasNumerosNombre(event)"
                             autocomplete="off">
                         </div>
                     </div>
@@ -23,7 +40,7 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label" for="descripcion">Descripción<span class="text-danger">*</span></label>
                         <div class="col-sm-8">
-                            <textarea type="textarea" style=" height: 100px;"
+                            <textarea
                             rows="10" cols="50" class="form-control alfanumerico"
                             id="descripcion" name="descripcion" maxlength="256"
                             placeholder="Ingrese la descripción del curso" 
@@ -46,27 +63,45 @@
                         <label class="col-sm-2 col-form-label" for="dias">Dias de clase <span class="text-danger">*</span></label>
                         <div class="col-sm-8" style="display: inline-flex;">
                             <div class="div-dias">
-                                <input type="checkbox" name="dia" value="L"> Lunes <br>
+                                <input type="checkbox" name="checks[]" value="L"> Lunes <br>
                             </div>
                             <div class="div-dias">
-                                <input type="checkbox" name="dia" value="M" > Martes<br>
+                                <input type="checkbox" name="checks[]" value="M" > Martes<br>
                             </div>
                             <div class="div-dias">
-                                <input type="checkbox" name="dia" value="Mi" > Miercoles<br>
+                                <input type="checkbox" name="checks[]" value="Mi" > Miercoles<br>
                             </div>
-                            <div>
-                                <input type="checkbox" name="dia" value="J" > Jueves<br>
+                            <div class="div-dias">
+                                <input type="checkbox" name="checks[]" value="J" > Jueves<br>
                             </div >
                             <div class="div-dias">
-                                 <input type="checkbox" name="dia" value="V" > Viernes<br>
+                                 <input type="checkbox" name="checks[]" value="V" > Viernes<br>
                             </div>
                             <div class="div-dias">
-                                 <input type="checkbox" name="dia" value="S" > Sabados 
+                                 <input type="checkbox" name="checks[]" value="S" > Sabados 
                             </div>
      
                         </div>
-</div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="dias">Horarios de clases <span class="text-danger">*</span></label>
+                        <div class="col-sm-10" style="display: inline-flex;">
+                                <label class="col-sm-2 col-form-label" for="dias">Hora Inicio <span class="text-danger">*</span></label>
+                                <div class=col-sm-2 style="display: inline-flex;">
+                                    <input type="time" min="07:00" max="22:00" class="form-control" id="hora-inicio" name="hora-inicio">    
+                                </div>
+                            
+                            
+                                <label class="col-sm-2 col-form-label" for="dias">Hora Fin <span class="text-danger">*</span></label>
+                                <div class=col-sm-2 style="display: inline-flex;">
+                                    <input type="time" min="07:00" max="22:00"  class="form-control" id="hora-fin" name="hora-fin" onchange="validarHoras()" 
+                                 required>
+                                   
+                            
+                            </div>
+                        </div>
 
+                    </div>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label" for="pensum">Pénsum<span class="text-danger">*</span></label>
                         <div class="col-sm-8">
@@ -111,10 +146,12 @@
                             onchange="validarFormatoImagen()" accept="image/jpg, image/jpeg, image/png">
                         </div>
                     </div>
+                    <br />
+                    <br />
 
                     <div class="form-group row">
                         <div class="col-lg-12 " align="center">
-                            <button type="submit" class="btn btn-success">Crear</button>
+                            <button type="submit" class="btn btn-success" >Crear</button>
                             <button type="button" class="btn btn-primary" onclick="resetForm()">Limpiar</button>
                         </div>
                     </div>
@@ -123,49 +160,9 @@
         </div>
     </div>    
 </div>
-
 {% endblock %}
+
 {% block extraScript %}
-<script src=" {% static 'js/curso.js' %}"></script>
-<script type="text/javascript">
-
-  function validarLetrasNumeros(event){
-    var input = document.getElementsByClassName('alfanumerico').value;
-    var key = event.key;            // Obtengo la tecla que presiono
-    var keyCode = event.keyCode;    // Obtengo el codigo de la tecla
-    expresion = /^[A-Z0-9a-záéíóúÁÉÍÓÚñÑ\s\.\',']+$/;
-    
-    if(!expresion.test(input+key)){
-      alert("Este campo permite solo permite letras y números.");
-      event.preventDefault();
-    }
-  }
-
-    function validarFormatoArchivo() {
-        var extensionArchivo = /(.pdf)$/i;
-        var pensum = document.getElementById('pensum');
-        var filePensum = pensum.value;
-        if(!extensionArchivo.test(filePensum)){
-            console.log(filePensum);
-            alert("El formato del pensum debe ser PDF.");
-            document.getElementById('pensum').value = "";            
-        }
-    }
-
-    function validarFormatoImagen(){
-        var extensionImagenes = /(.jpg|.jpeg|.png)$/i;
-        var imagen = document.getElementById('imagen');
-        var fileImagen = imagen.value;
-        if(!extensionImagenes.test(fileImagen)){
-            console.log(fileImagen);
-            alert("El formato de la imagen no es válido.");
-            document.getElementById('imagen').value = "";            
-        }
-
-    }
-    function resetForm(){
-        document.getElementById("form-nuevo-curso").reset();
-    }
-
-</script>
+  <script src="/static/js/scripts/cursos.js"></script>
+  <script src="/static/js/scripts/refactoring1.js"></script>
 {% endblock %}

@@ -2,7 +2,7 @@
 {% load static %}
 {% block titulo %} Reportes {% endblock %}
 
- {% block extraStyle %}
+{% block extraStyle %}
 
  <style type="text/css">
      .btn-repo{
@@ -32,7 +32,7 @@
         width: 50%:;
     }
 
- </style>
+</style>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
 <script src="{% static 'js/reporte.js' %}"></script>
 
@@ -146,7 +146,7 @@
 			<div class="card p-30">
 				<div class="media-left meida media-middle">
                 	<span><i class="fa fa-bar-chart f-s-40 color-success"></i></span>
-				<h4> Cursos compartidos por red social </h4>
+				<a href="/seleccionCurso"><h4> Cursos compartidos por red social </h4></a>
 				<p> Muestra el porcentaje de veces que fue 
 				compartido un curso en redes sociales como 
 				Facebook, Twitter y WhatsApp.</p>
@@ -157,22 +157,18 @@
 	
 </div>
 
-
-
-
-
-
 {% endblock %}
 
 {% block extraScript %}
-<script src="{% static 'js/reporte.js' %}"></script>
-<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.3.1.js"></script>
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
 
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('table#AreasDeInteres').DataTable();
-    } );
-</script>
+    <script src="{% static 'js/reporte.js' %}"></script>
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('table#AreasDeInteres').DataTable();
+        } );
+    </script>
 
 {% endblock %}

@@ -2,6 +2,7 @@
 from django.conf.urls import url, include
 from rest_framework.urlpatterns import format_suffix_patterns
 from . import views
+from django.contrib.auth.views import login
 from django.conf.urls.static import static
 
 urlpatterns = [
@@ -40,8 +41,12 @@ urlpatterns = [
     url(r'^reporteArea/$', views.reporte_user_area_interes, name='reporte_area'),
     url(r'^reporteSolicitud/$', views.reporte_user_solicitud_registro, name='reporte_solicitud'),
     url(r'^refresh/$', views.ajaxReporteCompartido, name='ajaxReporteCompartido'),
+    url(r'^seleccionCurso/$', views.visualizar_reporte_compartido, name='visualizar_reporte_compartido'),
+    url(r'^seleccionCurso/(?P<pk>[0-9]+)$', views.reporte_curso_compartido, name='reporte_curso_compartido'),    
+    url(r'^reporteCurso/(?P<pk>[0-9]+)$', views.reporte_curso_compartido, name='reporte_curso_compartido'),
     url(r'^exportarReporte/$',views.exportar_repo, name='exportar_reporte'),
     url(r'^logout/$',views.cerrar_sesion, name='cerrar_sesion'),
+    url(r'^exportar/Reporte/(?P<reporte>[0-9]+)/(?P<curso>[0-9]+)$',views.reportes_xlsx, name='reportes_xlsx'),
 
     
 ]

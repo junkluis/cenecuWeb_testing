@@ -2,19 +2,23 @@
 {% load static %}
 {% block titulo %} Crear profesor {% endblock %}
 {% block contenido %}
-<!-- Permite la creacion de un nuevo perfil de profesor -->
-<div class="card">
-  <h2>Crea un nuevo profesor</h2>
+
+<!-- Permite la creación de un nuevo perfil de profesor -->
+<div class="col-lg-12" >
+  <div class="card">
+    <div class="card-body formulario">
+      <h2>Crear un nuevo profesor</h2>
+      <br >
   
-  <!-- Campos del perfil de un profesor -->
-  <div class="card-body">
+    <!-- Campos del perfil de un profesor -->
     <div class="form-validation">
-      <form class="form-valide" action="{% url 'nuevo_profesor' %}"
+      <form  id="nuevoProfesor-form" class="form-valide" action="{% url 'nuevo_profesor' %}"
           method="post"  enctype="multipart/form-data"> {% csrf_token %}
         <div class="form-group row">
-          <label class="col-lg-4 col-form-label" for="nombreProfesor">
+          <label class="col-lg-2 col-form-label" for="nombreProfesor">
             Nombre<span class="text-danger">*</span></label>
-          <div class="col-lg-6">
+          <div class="col-lg-8">
+
             <input type="text" class="form-control letras" id="nombreProfesor" 
               name="nombreProfesor" maxlength="20"
               placeholder="Ingrese el nombre del profesor" required
@@ -23,9 +27,9 @@
         </div>
 
         <div class="form-group row">
-          <label class="col-lg-4 col-form-label" for="apellidoProfesor">
+          <label class="col-lg-2 col-form-label" for="apellidoProfesor">
             Apellido<span class="text-danger">*</span></label>
-          <div class="col-lg-6">
+          <div class="col-lg-8">
             <input type="text" class="form-control letras" id="apellidoProfesor" 
               name="apellidoProfesor" maxlength="20"
               placeholder="Ingrese el apellido del profesor" 
@@ -34,9 +38,9 @@
         </div>
     
         <div class="form-group row">
-          <label class="col-lg-4 col-form-label" for="titulo">
+          <label class="col-lg-2 col-form-label" for="titulo">
             Título<span class="text-danger">*</span></label>
-          <div class="col-lg-6">
+          <div class="col-lg-8">
             <input type="text" class="form-control letras" id="titulo" 
               name="titulo" maxlength="100"
               placeholder="Ingrese el título" required
@@ -45,9 +49,9 @@
         </div>
     
         <div class="form-group row">
-          <label class="col-lg-4 col-form-label" for="img_perfil">
+          <label class="col-lg-2 col-form-label" for="img_perfil">
             Foto<span class="text-danger">*</span></label>
-          <div class="col-lg-6">
+          <div class="col-lg-8">
             <input type="FILE" class="form-control" id="img_perfil" 
               name="img_perfil" required onchange="validarFormatoImagen()"
               accept="image/jpg, image/jpeg, image/png">
@@ -55,33 +59,34 @@
         </div>
     
         <div class="form-group row">
-          <label class="col-lg-4 col-form-label" for="frases_personal">
+          <label class="col-lg-2 col-form-label" for="frases_personal">
             Frase Personal<span class="text-danger">*</span></label>
-          <div class="col-lg-6">
-            <input type="textarea" class="form-control alfanumerico"
+          <div class="col-lg-8">
+            <textarea rows="4" 
+              cols="50" class="form-control alfanumerico"
               id="frases_personal" 
               name="frases_personal" maxlength="200"
               placeholder="Ingrese la frase personal" required
-              onkeydown="validarLetrasNumeros(event)">
+              onkeydown="validarLetrasNumerosFrase(event)"></textarea>
           </div>
         </div>
     
         <div class="form-group row">
-          <label class="col-lg-4 col-form-label" for="biografia">
+          <label class="col-lg-2 col-form-label" for="biografia">
             Biografía<span class="text-danger">*</span></label>
-          <div class="col-lg-6">
-            <input type="textarea"  style=" height: 100px;" rows="10" 
+          <div class="col-lg-8">
+            <textarea rows="4" 
             cols="50" class="form-control alfanumerico" id="biografia" 
             name="biografia" 
             maxlength="256" placeholder="Ingrese la biografía del profesor"
-            required onkeydown="validarLetrasNumeros(event)">
+            required onkeydown="validarLetrasNumerosBiografia(event)"></textarea>
           </div>
         </div>
     
         <div class="form-group row">
-          <label class="col-lg-4 col-form-label" for="_especializacion">
+          <label class="col-lg-2 col-form-label" for="_especializacion">
             Área de Especialización<span class="text-danger">*</span></label>
-          <div class="col-lg-6">
+          <div class="col-lg-8">
             <select class="form-control" id="area_especializacion" 
               name="area_especializacion">
               {% for area in areas %}                          
@@ -92,20 +97,20 @@
         </div>
     
         <div class="form-group row">
-          <label class="col-lg-4 col-form-label" for="url_linkedin">
+          <label class="col-lg-2 col-form-label" for="url_linkedin">
             LinkedIn<span class="text-danger">*</span></label>
-          <div class="col-lg-6">
+          <div class="col-lg-8">
             <input type="url" class="form-control" id="url_linkedin" 
               name="url_linkedin" maxlength="50"
               placeholder="https://www.linkedin.com/in/user/"
-              required>
+              required onblur="validarLinkedin()">
           </div>
         </div>
     
         <div class="form-group row">
-          <label class="col-lg-4 col-form-label" for="curriculum">
+          <label class="col-lg-2 col-form-label" for="curriculum">
             Currículum<span class="text-danger">*</span></label>
-          <div class="col-lg-6">
+          <div class="col-lg-8">
             <input type="FILE" class="form-control" id="curriculum" 
               name="curriculum" accept=".pdf" 
               onchange="validarFormatoArchivo()" required>
@@ -113,77 +118,33 @@
         </div>
     
         <div class="form-group row" hidden>
-          <label class="col-lg-4 col-form-label" for="estado">
+          <label class="col-lg-2 col-form-label" for="estado">
             Estado<span class="text-danger">*</span></label>
-          <div class="col-lg-6">
+          <div class="col-lg-8">
             <select class="form-control" id="estado" name="estado">
               <option value="Activo">Activo</option>
               <option value="Inactivo">Inactivo</option>
             </select>
           </div>
         </div>
-        <br />
+        <br >
+        <br >        
                 
-        <!-- Boton para agregar un nuevo perfil de profesor -->
+        <!-- Botón para agregar un nuevo perfil de profesor -->
         <div class="form-group row">
-          <div class="col-lg-8 ml-auto">
-            <button type="submit" class="btn btn-primary">Crear</button>
+          <div class="col-lg-12 " align="center">
+              <button type="submit" class="btn btn-success">Crear</button>
+              <button type="button" class="btn btn-primary" 
+              onclick="resetForm()">Limpiar</button>
           </div>
-        </div>
+      </div>
         
       </form>
     </div>
   </div>
 </div>
 {% endblock %}
+
 {% block extraScript %}
-<script type="text/javascript">
-
-  function validarLetras(event) {
-    var input = document.getElementsByClassName('letras').value;
-    var key = event.key;
-    var keyCode = event.keyCode;
-    var expresion = /^[A-Za-záéíóúÁÉÍÓÚñÑ\s\.\',']+$/;
-    
-    if(!expresion.test(input+key)){
-      alert("Este campo permite solo permite letras.");
-      event.preventDefault();
-    }
-  }
-
-  function validarLetrasNumeros(event){
-    var input = document.getElementsByClassName('alfanumerico').value;
-    var key = event.key;            // Obtengo la tecla que presiono
-    var keyCode = event.keyCode;    // Obtengo el codigo de la tecla
-    expresion = /^[A-Z0-9a-záéíóúÁÉÍÓÚñÑ\s\.\',']+$/;
-    
-    if(!expresion.test(input+key)){
-      alert("Este campo permite solo permite letras y números.");
-      event.preventDefault();
-    }
-  }
-
-  function validarFormatoArchivo() {
-    var extensionArchivo = /(.pdf)$/i;
-    var curriculum = document.getElementById('curriculum');
-    var archivo = curriculum.value;
-    if(!extensionArchivo.test(archivo)){
-        console.log(archivo);
-        alert("El formato del currículum debe ser PDF.");
-        document.getElementById('curriculum').value = "";        
-    }
-  }
-
-  function validarFormatoImagen(){
-    var extensionImagenes = /(.jpg|.jpeg|.png)$/i;
-    var imagen = document.getElementById('img_perfil');
-    var archivo = imagen.value;
-    if(!extensionImagenes.test(archivo)){
-        console.log(archivo);
-        alert("El formato de la imagen no es válido.");
-        document.getElementById('img_perfil').value = "";        
-    }
-  }
-  
-</script>
+  <script src="/static/js/scripts/profesores.js"></script>
 {% endblock %}

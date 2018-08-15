@@ -3,31 +3,34 @@
 {% block titulo %} Crear frase motivacional {% endblock %}
 {% block contenido %}
 <!-- Permite la creacion de información de una frase motivacional -->
-<div class="card">
-  <h2>Crea una nueva frase motivacional</h2>
-  
-  <!-- Campos de una frase motivacional -->
-  <div class="card-body">
+<div class="col-lg-12" >
+  <div class="card">
+    <div class="card-body formulario">
+      <h2>Crear una nueva frase motivacional</h2>
+      <br >
+      <br >
+
+    <!-- Campos de una frase motivacional -->
     <div class="form-validation">
-      <form class="form-valide" action="{% url 'nueva_frase' %}"
+      <form  id="nuevaFrase-form" class="form-valide" action="{% url 'nueva_frase' %}"
           method="post"  enctype="multipart/form-data"> {% csrf_token %}
         
         <div class="form-group row">
-          <label class="col-lg-4 col-form-label" for="descripcion">
+          <label class="col-lg-2 col-form-label" for="descripcion">
             Descripción<span class="text-danger">*</span></label>
-          <div class="col-lg-6">
-            <input type="textarea" style=" height: 100px;" rows="10" 
+          <div class="col-lg-8">
+            <textarea rows="10" 
             cols="50" class="form-control alfanumerico" id="descripcion"
-            name="descripcion" maxlength="256"
-            placeholder="Ingrese la descripción de la frase" 
-            required onkeydown="validarLetrasNumeros(event)">
+            name="descripcion" maxlength="256" 
+            placeholder="Ingrese la descripción del anuncio" 
+            required onkeydown="validarLetrasNumeros(event)"></textarea>
           </div>
         </div>
 
         <div class="form-group row">
-          <label class="col-lg-4 col-form-label" for="img_frase">
+          <label class="col-lg-2 col-form-label" for="img_frase">
             Imagen<span class="text-danger">*</span></label>
-          <div class="col-lg-6">
+          <div class="col-lg-8">
             <input type="FILE" class="form-control" id="img_frase" 
               name="img_frase" required onchange="validarFormatoImagen()"
               accept="image/jpg, image/jpeg, image/png">
@@ -35,54 +38,33 @@
         </div>
 
         <div class="form-group row" hidden>
-          <label class="col-lg-4 col-form-label" for="estado">
+          <label class="col-lg-2 col-form-label" for="estado">
             Estado<span class="text-danger">*</span></label>
-          <div class="col-lg-6">
+          <div class="col-lg-8">
             <select class="form-control" id="estado" name="estado">
               <option value="Activo">Activo</option>
               <option value="Inactivo">Inactivo</option>
             </select>
           </div>
         </div>
-        <br />        
+        <br >      
+        <br >          
         
         <!-- Boton para agregar una nueva frase motivacional -->
         <div class="form-group row">
-          <div class="col-lg-8 ml-auto">
-            <button type="submit" class="btn btn-primary">Crear</button>
+          <div class="col-lg-12 " align="center">
+              <button type="submit" class="btn btn-success">Crear</button>
+              <button type="button" class="btn btn-primary" onclick="resetForm()">Limpiar</button>
           </div>
-        </div>
+      </div>
         
       </form>
     </div>
   </div>
 </div>
 {% endblock %}
-{% block extraScript %}
-<script type="text/javascript">
-
-  function validarLetrasNumeros(event){
-    var input = document.getElementsByClassName('alfanumerico').value;
-    var key = event.key;            // Obtengo la tecla que presiono
-    var keyCode = event.keyCode;    // Obtengo el codigo de la tecla
-    expresion = /^[A-Z0-9a-záéíóúÁÉÍÓÚñÑ\s\.\',']+$/;
-    
-    if(!expresion.test(input+key)){
-      alert("Este campo permite solo permite letras y números.");
-      event.preventDefault();
-    }
-  }
-
-  function validarFormatoImagen(){
-    var extensionImagenes = /(.jpg|.jpeg|.png)$/i;
-    var imagen = document.getElementById('img_frase');
-    var archivo = imagen.value;
-    if(!extensionImagenes.test(archivo)){
-        console.log(archivo);
-        alert("El formato de la imagen no es válido.");
-        document.getElementById('img_frase').value = "";        
-    }
-  }
   
-</script>
+{% block extraScript %}
+  <script src="/static/js/scripts/frases.js"></script>
+  <script src="/static/js/scripts/refactoring1.js"></script>
 {% endblock %}

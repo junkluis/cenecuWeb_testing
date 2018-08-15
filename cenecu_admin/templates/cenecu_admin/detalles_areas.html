@@ -1,10 +1,9 @@
 {% extends "cenecu_admin/base.html" %}
 {% load static %}
 {% block titulo %}Áreas de Interés{% endblock %}
+
 {% block contenido %}
-<!-- Bread crumb -->
-<!-- End Bread crumb -->
-<!-- Container fluid  -->
+<!-- Contenido -->
 <div class="col-lg-12">
   <div class="card">
     {% if messages %}
@@ -18,15 +17,18 @@
       {% endfor %}
     {% endif %}
 
-    <!-- Muestra una lista de las areas de interes -->
-    <div class="row">
-      <div class="col-sm-4">
+    <!-- Muestra una lista de las áreas de interés -->
+    <div class="info-area">
+      <div class="col-sm-9">
         <h2>Detalle de Áreas de Interés</h2>
+        <p>Muestra la información de las áreas de interés creadas y permite crear nuevas.</p>
+        <br >
+        <br >
       </div> 
 
-      <div class="col-sm-8" style="align-content: right; margin-right:0;">
-        <a href="/crearArea"><button style="margin-right:0px;" 
-          type="button" id="nuevo-boton"class="btn btn-info"
+     <div class="boton-nuevo">
+        <a href="/crearArea"><button 
+          type="button" id="nuevo-boton"class="btn btn-success"
           data-title="Nuevo" data-target="#nuevo">Nuevo</button>
         </a>
       </div>
@@ -34,50 +36,55 @@
     
 
     <div class="table-responsive">
-    <table class="table table-hover">
+    <table class="table table-hover" id="areaTable">
       <thead>
         <tr>
           <th scope="col">#</th>
           <th scope="col">Nombre</th>
           <th scope="col">Descripción</th>
-          <th scope="col">Estado</th>
-          <th scope="col">Editar</th>
-          <th scope="col">Eliminar </th>
+          <th scope="col"  width="60px">Editar</th>
+          <th scope="col"  width="60px">Eliminar </th>
         </tr>
       </thead>
       
       <tbody>
-        <!-- Informacion de un areas de interes-->
+        <!-- Información de un áreas de interés-->
         {% for area in areas %}
-          <tr>
-            <th scope="row"> {{forloop.counter}}</th>
-              <td>{{area.nombre}}</td>
-              <td>{{area.descripcion}}</td>
-              <td><p style="color:#31c634;"> {{area.estado}}</p></td>
-              
-              <!-- Boton para editar la informacion de un area de interes-->
-              <td>
-                <a href="/editarArea/{{area.pk}}">
-                  <p  title="Editar"><button type="button" class="btn btn-info" 
-                  data-title="Editar" data-target="#editar" >
-                  <span class="fa fa-edit"></span></button></p>
-                </a>
-              </td>
-              
-              <!--Botón para eliminar informacion de un area de interes -->
-              <td>
-                <a href="/eliminarArea/{{area.pk}}">
-                  <p title="Eliminar"><button  type="button" 
-                  class="btn btn-danger" data-title="Eliminar" 
-                  data-target="#eliminar" ><span class="fa fa-trash"></span>
-                  </button></p>
-                </a>
-              </td> 
-          </tr>
+          {% if area.estado == "Activo" %}
+            <tr>
+              <th scope="row"> {{forloop.counter}}</th>
+                <td class="box-name"><textarea class="box-responsive">{{area.nombre}}</textarea></td>
+                <td ><textarea class="box-responsive">{{area.descripcion}}</textarea></td>
+                
+                <!-- Botón para editar la información de un área de interés-->
+                <td>
+                  <a href="/editarArea/{{area.pk}}">
+                    <p  title="Editar"><button type="button" class="btn btn-primary" 
+                    data-title="Editar" data-target="#editar" >
+                    <span class="fa fa-edit"></span></button></p>
+                  </a>
+                </td>
+                
+                <!--Botón para eliminar información de un área de interés -->
+                <td>
+                  <a href="/eliminarArea/{{area.pk}}" class="delete"
+                    data-confirm="¿Está seguro de que desea eliminar esta área?">
+                    <p title="Eliminar"><button  type="button" 
+                    class="btn btn-danger" data-title="Eliminar" 
+                    data-target="#eliminar"><span class="fa fa-trash"></span>
+                    </button></p>
+                  </a>
+                </td> 
+            </tr>
+          {% endif %}
         {% endfor %}
       </tbody>
       </table>    
     </div>     
   </div>
 </div>
+{% endblock %}
+
+{% block extraScript %}
+  <script src="/static/js/scripts/areas.js"></script>
 {% endblock %}

@@ -21,6 +21,7 @@
     <link href="{% static 'css/lib/owl.theme.default.min.css' %}" rel="stylesheet" />
     <link href="{% static 'css/helper.css' %}" rel="stylesheet">
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
 
      <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -66,68 +67,7 @@
                                 <input type="text" class="form-control" placeholder="Search here"> <a class="srh-btn"><i class="ti-close"></i></a> </form>
                         </li>
                         <!-- Comment -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-muted text-muted  " href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-bell"></i>
-                                <div class="notify"> <span class="heartbit"></span> <span class="point"></span> </div>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right mailbox animated zoomIn">
-                                <ul>
-                                    <li>
-                                        <div class="drop-title">Notifications</div>
-                                    </li>
-                                    <li>
-                                        <div class="message-center">
-                                            <a href="#">
-                                                <div class="btn btn-info btn-circle m-r-10"><i class="ti-settings"></i></div>
-                                                <div class="mail-contnet">
-                                                    <h5>This is title</h5> <span class="mail-desc">You can customize this template as you want</span> <span class="time">9:08 AM</span>
-                                                </div>
-                                            </a>
-                                            <!-- Message -->
-                                            <a href="#">
-                                                <div class="btn btn-primary btn-circle m-r-10"><i class="ti-user"></i></div>
-                                                <div class="mail-contnet">
-                                                    <h5>This is another title</h5> <span class="mail-desc">Just see the my admin!</span> <span class="time">9:02 AM</span>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <a class="nav-link text-center" href="javascript:void(0);"> <strong>Check all notifications</strong> <i class="fa fa-angle-right"></i> </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <!-- End Comment -->
-                        <!-- Messages -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-muted  " href="#" id="2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-envelope"></i>
-                                <div class="notify"> <span class="heartbit"></span> <span class="point"></span> </div>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right mailbox animated zoomIn" aria-labelledby="2">
-                                <ul>
-                                    <li>
-                                        <div class="drop-title">You have 4 new messages</div>
-                                    </li>
-                                    <li>
-                                        <div class="message-center">
-                                            <!-- Message -->
-                                            <a href="#">
-                                                <div class="user-img"> <img src="images/users/5.jpg" alt="user" class="img-circle"> <span class="profile-status online pull-right"></span> </div>
-                                                <div class="mail-contnet">
-                                                    <h5>Michael Qin</h5> <span class="mail-desc">Just see the my admin!</span> <span class="time">9:30 AM</span>
-                                                </div>
-                                            </a>
-                                            <!-- Message -->
-                    
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <a class="nav-link text-center" href="javascript:void(0);"> <strong>See all e-Mails</strong> <i class="fa fa-angle-right"></i> </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
+                        
                         <!-- End Messages -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-muted  " href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="{% static 'images/person.png' %}" alt="user" class="profile-pic" /></a>
@@ -151,19 +91,19 @@
                     <ul id="sidebarnav">
                         <li class="nav-devider"></li>
                         <li class="nav-label">Herramientas</li>
-                        <li> <a class="has-arrow  " href="{% url 'index' %}" aria-expanded="false"><i class="fa fa-book"></i><span class="hide-menu">Cursos
+                        <li> <a  href="{% url 'index' %}" aria-expanded="false"><i class="fa fa-book"></i><span class="hide-menu">Cursos
                         </span></a></li>
-                        <li> <a class="has-arrow  " href="{% url 'listar_profesores' %}" aria-expanded="false"><i class="fa fa-user"></i><span class="hide-menu">Profesores
+                        <li> <a  href="{% url 'listar_profesores' %}" aria-expanded="false"><i class="fa fa-user"></i><span class="hide-menu">Profesores
                         </span></a></li>
-                        <li> <a class="has-arrow  " href="{% url 'listar_areas' %}" aria-expanded="false"><i class="fa fa-object-group"></i><span class="hide-menu">Áreas de Interés
+                        <li> <a  href="{% url 'listar_areas' %}" aria-expanded="false"><i class="fa fa-object-group"></i><span class="hide-menu">Áreas de Interés
                         </span></a></li>
-                        <li> <a class="has-arrow  " href="{% url 'listar_anuncios' %}" aria-expanded="false"><i class="fa fa-bullhorn"></i><span class="hide-menu">Anuncios Publicitarios
+                        <li> <a  href="{% url 'listar_anuncios' %}" aria-expanded="false"><i class="fa fa-bullhorn"></i><span class="hide-menu">Anuncios Publicitarios
                         </span></a>
                         </li>
-                        <li> <a class="has-arrow  " href="{% url 'listar_frases' %}" aria-expanded="false"><i class="fa fa-photo"></i><span class="hide-menu">Frases Motivacionales
+                        <li> <a  href="{% url 'listar_frases' %}" aria-expanded="false"><i class="fa fa-photo"></i><span class="hide-menu">Frases Motivacionales
                         </span></a>
                         </li>
-                        <li> <a class="has-arrow  " href="{% url 'visualizar_reporte' %}" aria-expanded="false"><i class="fa fa-line-chart"></i><span class="hide-menu">Reportes
+                        <li> <a  href="{% url 'visualizar_reporte' %}" aria-expanded="false"><i class="fa fa-line-chart"></i><span class="hide-menu">Reportes
                         </span></a>
                         </li>
                         
@@ -201,10 +141,7 @@
     {% block extraScript %}{% endblock %}
      <script src=" {% static 'js/curso.js'' %}"></script>
     <!-- Amchart -->
-     <script src=" {% static 'js/lib/morris-chart/raphael-min.js' %}"></script>
-    <script src=" {% static 'js/lib/morris-chart/morris.js' %}"></script>
-    <script src=" {% static 'js/lib/morris-chart/dashboard1-init.js' %}"></script>
-
+    
 
     <script src=" {% static 'js/lib/calendar-2/moment.latest.min.js' %}"></script>
     <!-- scripit init-->
@@ -222,6 +159,8 @@
     <!-- scripit init-->
 
     <script src=" {% static 'js/scripts.js' %}"></script>
+
+    
     
 
 </body>
